@@ -37,6 +37,6 @@
 ***
 ## 打赏赞助
 <div style="display:flex;">
-<img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/a.jpg" width="45%">
-<img style="margin-left:5px;" decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/w.jpg" width="45%">
+<img src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/a.jpg" width="45%">
+<img style="margin-left:5px;" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/w.jpg" width="45%">
 </div>
