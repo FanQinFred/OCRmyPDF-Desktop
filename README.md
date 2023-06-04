@@ -1,5 +1,4 @@
 [中文](/README.zh-CN.md)
-[English](/README.md)
 # OCRmyPDF-Desktop
 Run in Windows, OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be searched.
 <img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/oc1nf-cxfc2.gif" width="100%">
