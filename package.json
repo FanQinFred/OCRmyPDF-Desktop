@@ -1,0 +1,77 @@
+{
+  "name": "fanfan-pdf-ocr",
+  "version": "0.0.1",
+  "private": true,
+  "productName": "凡凡PDF文字识别",
+  "author": "fafanpdfocr.caj2pdf.cn",
+  "description": "fafanpdfocr.caj2pdf.cn",
+  "icon": "dist_electron/icon.icns",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
+    "test": "vue-cli-service serve --mode test"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "@baiducloud/sdk": "^1.0.0-rc.34",
+    "axios": "^0.21.4",
+    "clipboard": "^2.0.11",
+    "core-js": "^3.6.5",
+    "electron-builder": "^23.6.0",
+    "element-ui": "^2.15.8",
+    "pdfjs-dist": "2.6.347",
+    "qs": "^6.10.1",
+    "sass": "^1.26.3",
+    "sass-loader": "^8.0.2",
+    "set-promise-interval": "^1.0.8",
+    "view-design": "^4.7.0-beta.10",
+    "vue": "^2.6.11",
+    "vue-count-to": "^1.0.13",
+    "vue-google-adsense": "^1.10.1",
+    "vue-meta": "^2.4.0",
+    "vue-router": "^3.5.2",
+    "vue-script2": "^2.1.0",
+    "weixin-jsapi": "^1.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "compression-webpack-plugin": "^10.0.0",
+    "electron": "^13.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "source-map-loader": "^1.0.0",
+    "terser-webpack-plugin": "^1.4.5",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
