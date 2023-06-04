@@ -14,6 +14,6 @@ We provide English and Chinese Simplify language. To install other languages, do
 
 ## Sponsor
 <div style="display:flex;">
-<img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/a.jpg" width="50%">
-<img style="margin-left:5px;" decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/w.jpg" width="50%">
+<img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/a.jpg" width="45%">
+<img style="margin-left:5px;" decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/w.jpg" width="45%">
 </div>
