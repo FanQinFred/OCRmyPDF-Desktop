@@ -2,7 +2,7 @@
 ***
 # OCRmyPDF-Desktop
 Run in Windows, OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be searched.
-<img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/oc1nf-cxfc2.gif" width="100%">
+<img src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/oc1nf-cxfc2.gif" width="100%">
 ## Installation
 
 For Windows user, you can donwload installer here:
@@ -14,6 +14,6 @@ We provide English and Chinese Simplify language. To install other languages, do
 
 ## Sponsor
 <div style="display:flex;">
-<img decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/a.jpg" width="45%">
-<img style="margin-left:5px;" decoding="async" src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/w.jpg" width="45%">
+<img decoding="async" src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/a.jpg" width="45%">
+<img style="margin-left:5px;" decoding="async" src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/w.jpg" width="45%">
 </div>
