@@ -3,7 +3,7 @@
 # OCRmyPDF桌面端
 鉴于很多使用者不会配置环境，我们在OCRmyPDF的基础上，集成了所需环境，并使用Electron开发了桌面端。
 
-<img decoding="async" src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/oc1nf-cxfc2.gif" width="100%">
+<img src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/s.png" style="border-radius:5px;border:5px solid #ddd;" width="100%">
 
 ***
 
