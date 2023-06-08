@@ -3,7 +3,7 @@
 # OCRmyPDF桌面端
 鉴于很多使用者不会配置环境，我们在OCRmyPDF的基础上，集成了所需环境，并使用Electron开发了桌面端。
 
-<img src="https://caj2pdf-cdn.cdn.bcebos.com/pdfocr/s.png" style="border-radius:5px;border:5px solid #ddd;" width="100%">
+<img src="https://raw.githubusercontent.com/FanQinFred/OCRmyPDF-Desktop/main/Doc/images/example.gif" style="border-radius:5px;border:5px solid #ddd;" width="100%">
 
 ***
 
@@ -28,6 +28,7 @@
 
 ## 待做列表
 - [x] 完成支持英语和中文的基础版本
+- [ ] 支持设置输出文件路径
 - [ ] 支持100+种的OCR语言
 - [ ] 支持多个OCR任务并行
 - [ ] UI界面美化
@@ -37,6 +38,9 @@
 ***
 ## 打赏赞助
 <div style="display:flex;">
-<img src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/a.jpg" width="45%">
-<img style="margin-left:5px;" src="https://caj2pdf-cdn.gz.bcebos.com/pdfocr/w.jpg" width="45%">
+
+<img src="https://raw.githubusercontent.com/FanQinFred/OCRmyPDF-Desktop/main/Doc/images/wxpay.jpg" width="45%">
+
+<img style="margin-left:5px;"  src="https://raw.githubusercontent.com/FanQinFred/OCRmyPDF-Desktop/main/Doc/images/alipay.jpg" width="45%">
+
 </div>
