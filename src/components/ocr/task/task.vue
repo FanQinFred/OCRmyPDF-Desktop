@@ -118,7 +118,8 @@
                             <el-button @click="cancelCurrentTask(index)" type="text" style="border:none;" size="small" icon="el-icon-delete">终止</el-button>
                         </div>
                         <div v-else-if="ocrfile.status==2||ocrfile.status=='2'">
-                            <el-button @click="openPDF(ocrfile.file.path)" type="text" style="border:none;" size="small" icon="el-icon-document">查看</el-button>
+                            <el-button v-if="ocrfile.label.indexOf('BENIGN')!=-1" @click="openPDF(ocrfile.file.path)" type="text" :style="{'border':'none','color':'#2ba52b'}" size="small" icon="el-icon-document">{{ocrfile.label}}</el-button>
+                            <el-button v-else                         @click="openPDF(ocrfile.file.path)" type="text" :style="{'border':'none','color':'red'}" size="small" icon="el-icon-document">{{ocrfile.label}}</el-button>
                             <el-button @click="openFolder(ocrfile.file.path)" type="text" style="border:none;" size="small" icon="el-icon-folder-opened">文件夹</el-button>
                             <el-button @click="cancelTask(index)" type="text" style="border:none;" size="small" icon="el-icon-delete">删除</el-button>
                         </div>
@@ -205,8 +206,6 @@
 
 <script>
 import {
-    // submit_ocr_task,
-    query_file_status,
     stop_file_ocr
 } from "@/api/api.js";
 
@@ -226,6 +225,7 @@ export default {
     },
     data() {
         return {
+            currentTaskIndex:0,
             fileMaxId: 0,
             fileList: [],
             taskInterval: null,
@@ -261,6 +261,7 @@ export default {
                                 return false;
                             } else {
                                 if (ocrfile.status == 0) {
+                                    that.currentTaskIndex = ocrfile.id;
                                     that.sendFileToOCR(ocrfile);
                                 }
                             }
@@ -270,7 +271,21 @@ export default {
             }, 1000)
         }
         ipcRenderer.on('docker-cmd-stdout', (event, message) => {
-            console.log('stdout message: ' + message);
+            if(message.toLowerCase().indexOf("launching flowdroid")!=-1){
+                that.fileList[that.currentTaskIndex].progress = parseInt(5);
+                that.fileList[that.currentTaskIndex].desciption_progress = "Launching FlowDroid";
+            }else if(message.toLowerCase().indexOf("processing flowdroid")!=-1){
+                that.fileList[that.currentTaskIndex].progress = parseInt(10);
+                that.fileList[that.currentTaskIndex].desciption_progress = "Processing FlowDroid";
+            }else if(message.toLowerCase().indexOf("execute features")!=-1){
+                that.fileList[that.currentTaskIndex].progress = parseInt(20);
+                that.fileList[that.currentTaskIndex].desciption_progress = "Execute Features";
+            }else if(message.toLowerCase().indexOf("predict result:")!=-1){
+                const startIndex = message.lastIndexOf(":") + 1; // 获取最后一个冒号后的索引
+                const result = message.substring(startIndex); // 提取从 startIndex 开始到字符串的末尾的部分
+                console.log(result); // 输出 "benign"
+                that.fileList[that.currentTaskIndex].label = result.toUpperCase();
+            }
             let log = {};
             log.message = (new Date()).toLocaleString() + " " + message;
             log.logType = "info";
@@ -278,7 +293,6 @@ export default {
             this.logs.unshift(log);
         })
         ipcRenderer.on('docker-cmd-stderr', (event, message) => {
-            console.log('stderr message: ' + message);
             let log = {};
             log.message = (new Date()).toLocaleString() + " " + message;
             log.logType = "error";
@@ -288,7 +302,16 @@ export default {
         ipcRenderer.on('docker-cmd-close', (event, message) => {
             console.log('close message: ' + message);
             let log = {};
-            if(message=="1"||message==1){
+            if(message=="100"||message==100){
+                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is "+message+" Machine-Learning test Succesfully."
+                log.logType = "success";
+                that.fileList[that.currentTaskIndex].progress = parseInt(100);
+                that.fileList[that.currentTaskIndex].desciption_progress = "";
+                that.busy = false;
+                that.fileList[that.currentTaskIndex].status = 2;
+                clearPromiseInterval(that.statusInterval);
+                return;
+            }else if(message=="1"||message==1){
                 log.message = (new Date()).toLocaleString() + " " + "Error::Exit code is "+message+", Please see bottom log for detail."
                 log.logType = "error";
             }else{
@@ -316,10 +339,10 @@ export default {
         sendFileToOCR(ocrfile) {
             var that = this;
             console.log(that);
-            this.busy = true;
+            that.busy = true;
             ocrfile.status = 1;
             ocrfile.desciption_progress = "扫描内容中";
-            this.logs=[];
+            that.logs=[];
           
             // 1.将文件复制到工作目录
             console.log("ocrfile: %o",ocrfile);
@@ -354,46 +377,6 @@ export default {
             that.$global.fileList.push(ocrfile);
             return false;
         },
-        statusListener(id, ocrfile) {
-            var that = this;
-            let requestData = {
-                "uid": id
-            }
-            if (that.checkFileExsits(that.$global.fileList, ocrfile.file)) {
-                query_file_status(requestData).then(qft => {
-                    if (qft.status == "0") { //正在处理
-                        if (qft.sc == "1") {
-                            let sp = qft.sc_progress.replace("%", "");
-                            ocrfile.progress = parseInt(parseInt(sp) / 2);
-                            ocrfile.desciption_progress = "扫描内容中";
-                        } else if (qft.ocr == "1") {
-                            let op = qft.ocr_progress.replace("%", "");
-                            if (op == 0) {
-                                if (parseInt(ocrfile.progress) <= 50) {
-                                    ocrfile.progress = 50;
-                                }
-                                ocrfile.progress = parseInt(ocrfile.progress + 1);
-                            } else {
-                                ocrfile.progress = parseInt(parseInt(op) / 2 + 50);
-                            }
-                            ocrfile.desciption_progress = "识别文字中";
-                        }
-                    } else if (qft.status == "1") { //处理完成
-                        ocrfile.progress = 100;
-                        this.busy = false;
-                        ocrfile.status = 2;
-                        clearPromiseInterval(that.statusInterval);
-                        return;
-                    } else { //没有查询到该任务
-                        ocrfile.progress = -1;
-                        this.busy = false;
-                        ocrfile.status = parseInt(qft.status) + 1;
-                        clearPromiseInterval(that.statusInterval);
-                        return;
-                    }
-                });
-            }
-        },
         openPDF(file) {
             console.log(file);
             ipcRenderer.send('openFile', file);
@@ -417,16 +400,7 @@ export default {
         removeAllTasks() {
             var that = this;
             this.busy = false;
-            that.fileList.forEach(ocrfile => {
-                if (ocrfile.status == 1) {
-                    let requestData = {
-                        "uid": ocrfile.uid
-                    }
-                    stop_file_ocr(requestData);
-                }
-            })
             that.$global.fileList.splice(0);
-            clearPromiseInterval(that.statusInterval);
             return;
         },
         // 2023/10/10 添加恶意APK的相关函数

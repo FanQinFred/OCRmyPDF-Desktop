@@ -226,7 +226,7 @@ let win;
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 930,
+    width: 1076,
     height: 600,
     frame: true,                   // 显示窗口边框
     webPreferences: {

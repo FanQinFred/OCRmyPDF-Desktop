@@ -7,24 +7,25 @@
 
 <template>
 <div class="c">
-    <el-form ref="form" :model="setting" label-width="80px">
+    <el-form ref="form" :model="setting" label-width="90px">
 
-        <el-form-item label="PDF语言">
+        <el-form-item label="特征提取">
             <el-checkbox-group v-model="setting.language">
-                <el-checkbox label="中文" name="中文"></el-checkbox>
-                <el-checkbox label="English" name="English"></el-checkbox>
+                <el-checkbox label="静态特征" name="静态特征"></el-checkbox>
+                <el-checkbox label="动态特征" name="动态特征"></el-checkbox>
             </el-checkbox-group>
         </el-form-item>
 
-        <el-form-item label="CPU数量">
-            <el-input-number size="mini" v-model="setting.jobs" :min="1" :max="64" label="CPU数量"></el-input-number>
+        <el-form-item label="Docker路径">
+            <el-input placeholder="请选择路径" size="small" style="max-width:300px;">
+                <i slot="prefix" class="el-input__icon el-icon-s-platform"></i>
+            </el-input>        
         </el-form-item>
 
-        <el-form-item label="输出格式">
-            <el-select size="mini" v-model="setting.output_type" placeholder="请选择">
-                <el-option label="PDF" value="PDF"></el-option>
-                <el-option label="PDF/A" value="PDF/A"></el-option>
-            </el-select>
+        <el-form-item label="模型文件">
+            <el-input placeholder="请选择路径" size="small" style="max-width:300px;">
+                <i slot="prefix" class="el-input__icon el-icon-s-opportunity"></i>
+            </el-input>
         </el-form-item>
 
     </el-form>
@@ -48,7 +49,7 @@ export default {
     data() {
         return {
             setting: {
-                language: ['中文', 'English'],
+                language: ['静态特征'],
                 jobs: 1,
                 output_type:'PDF'
             }
