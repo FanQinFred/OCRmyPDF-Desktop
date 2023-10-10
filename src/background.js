@@ -57,81 +57,81 @@ function checkGhostscriptLanguage(is64Bit) {
   })
 }
 
-function installGhostscript() {
-  const is64bit = (os.arch() === "x64" || os.arch() === "arm64");
-  if (is64bit) {
-    console.log("OS::64-bit");
-    fs.exists("C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64.exe", function (exists) {
-      if (!exists) {
-        console.log("Bad::Ghostscript has not been installed.");
-        let appPath = app.getAppPath();
-        let ghostscriptInstallerPath = path.join(appPath, 'dependencies', 'gs9561w64.exe');
-        console.log("ghostscriptInstallerPath: " + ghostscriptInstallerPath);
-        runExec(ghostscriptInstallerPath + " /S", {});
-        checkGhostscriptLanguage(true);
-      } else {
-        console.log("Good::Ghostscript has been installed.");
-        checkGhostscriptLanguage(true);
-      }
-    });
-  } else {
-    console.log("OS::32-bit OS");
-    fs.exists("C:\\Program Files (x86)\\gs\\gs9.56.1\\bin\\gswin32.exe", function (exists) {
-      if (!exists) {
-        console.log("Bad::Ghostscript has not been installed.");
-        let appPath = app.getAppPath();
-        let ghostscriptInstallerPath = path.join(appPath, 'dependencies', 'gs9561w32.exe');
-        console.log("ghostscriptInstallerPath: " + ghostscriptInstallerPath);
-        runExec(ghostscriptInstallerPath + " /S", {});
-        checkGhostscriptLanguage(false);
-      } else {
-        console.log("Good::Ghostscript has been installed.");
-        checkGhostscriptLanguage(false);
-      }
-    });
-  }
-}
+// function installGhostscript() {
+//   const is64bit = (os.arch() === "x64" || os.arch() === "arm64");
+//   if (is64bit) {
+//     console.log("OS::64-bit");
+//     fs.exists("C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64.exe", function (exists) {
+//       if (!exists) {
+//         console.log("Bad::Ghostscript has not been installed.");
+//         let appPath = app.getAppPath();
+//         let ghostscriptInstallerPath = path.join(appPath, 'dependencies', 'gs9561w64.exe');
+//         console.log("ghostscriptInstallerPath: " + ghostscriptInstallerPath);
+//         runExec(ghostscriptInstallerPath + " /S", {});
+//         checkGhostscriptLanguage(true);
+//       } else {
+//         console.log("Good::Ghostscript has been installed.");
+//         checkGhostscriptLanguage(true);
+//       }
+//     });
+//   } else {
+//     console.log("OS::32-bit OS");
+//     fs.exists("C:\\Program Files (x86)\\gs\\gs9.56.1\\bin\\gswin32.exe", function (exists) {
+//       if (!exists) {
+//         console.log("Bad::Ghostscript has not been installed.");
+//         let appPath = app.getAppPath();
+//         let ghostscriptInstallerPath = path.join(appPath, 'dependencies', 'gs9561w32.exe');
+//         console.log("ghostscriptInstallerPath: " + ghostscriptInstallerPath);
+//         runExec(ghostscriptInstallerPath + " /S", {});
+//         checkGhostscriptLanguage(false);
+//       } else {
+//         console.log("Good::Ghostscript has been installed.");
+//         checkGhostscriptLanguage(false);
+//       }
+//     });
+//   }
+// }
 
 
-function installTesseract() {
-  const is64bit = (os.arch() === "x64" || os.arch() === "arm64");
-  if (is64bit) {
-    console.log("OS::64-bit");
-    fs.exists("C:\\Program Files\\Tesseract-OCR\\tesseract.exe", function (exists) {
-      if (!exists) {
-        console.log("Bad::Tesseract has not been installed.");
-        let appPath = app.getAppPath();
-        let tesseractInstallerPath = path.join(appPath, 'dependencies', 't64.exe');
-        console.log("tesseractInstallerPath: " + tesseractInstallerPath);
-        runExec(tesseractInstallerPath + " /S", {});
-      } else {
-        console.log("Good::Tesseract has been installed.");
-      }
-    });
-  } else {
-    console.log("OS::32-bit OS");
-    fs.exists("C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe", function (exists) {
-      if (!exists) {
-        console.log("Bad::Tesseract has not been installed.");
-        let appPath = app.getAppPath();
-        let tesseractInstallerPath = path.join(appPath, 'dependencies', 't32.exe');
-        console.log("tesseractInstallerPath: " + tesseractInstallerPath);
-        runExec(tesseractInstallerPath + " /S", {});
-      } else {
-        console.log("Good::Tesseract has been installed.");
-      }
-    });
-  }
-}
+// function installTesseract() {
+//   const is64bit = (os.arch() === "x64" || os.arch() === "arm64");
+//   if (is64bit) {
+//     console.log("OS::64-bit");
+//     fs.exists("C:\\Program Files\\Tesseract-OCR\\tesseract.exe", function (exists) {
+//       if (!exists) {
+//         console.log("Bad::Tesseract has not been installed.");
+//         let appPath = app.getAppPath();
+//         let tesseractInstallerPath = path.join(appPath, 'dependencies', 't64.exe');
+//         console.log("tesseractInstallerPath: " + tesseractInstallerPath);
+//         runExec(tesseractInstallerPath + " /S", {});
+//       } else {
+//         console.log("Good::Tesseract has been installed.");
+//       }
+//     });
+//   } else {
+//     console.log("OS::32-bit OS");
+//     fs.exists("C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe", function (exists) {
+//       if (!exists) {
+//         console.log("Bad::Tesseract has not been installed.");
+//         let appPath = app.getAppPath();
+//         let tesseractInstallerPath = path.join(appPath, 'dependencies', 't32.exe');
+//         console.log("tesseractInstallerPath: " + tesseractInstallerPath);
+//         runExec(tesseractInstallerPath + " /S", {});
+//       } else {
+//         console.log("Good::Tesseract has been installed.");
+//       }
+//     });
+//   }
+// }
 
-function startServer() {
-  let appPath = app.getAppPath();
-  let managePath = path.join(appPath, 'dependencies', 'manage', 'manage.exe');
-  let runServerEnv = path.join(appPath, 'dependencies', 'manage');
-  console.log("managePath: " + managePath);
-  runExec("for /f \"tokens=5\" %a in ('netstat -aon ^| findstr \":59821\"') do taskkill /f /pid %a");
-  runExec(managePath + " runserver 59821 --noreload", { cwd: runServerEnv });
-}
+// function startServer() {
+//   let appPath = app.getAppPath();
+//   let managePath = path.join(appPath, 'dependencies', 'manage', 'manage.exe');
+//   let runServerEnv = path.join(appPath, 'dependencies', 'manage');
+//   console.log("managePath: " + managePath);
+//   runExec("for /f \"tokens=5\" %a in ('netstat -aon ^| findstr \":59821\"') do taskkill /f /pid %a");
+//   runExec(managePath + " runserver 59821 --noreload", { cwd: runServerEnv });
+// }
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -202,11 +202,12 @@ ipcMain.on('openFolder', (event, file) => {
 })
 
 ipcMain.on('checkEvironment', (event, data) => {
-  installGhostscript();
-  installTesseract();
-  startServer();
+  // installGhostscript();
+  // installTesseract();
+  // startServer();
   setTimeout(() => {
     win.webContents.send('checkEvironment', 'ok');
+    console.log("延时两秒检测环境~");
   }, 2000)
 })
 

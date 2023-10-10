@@ -61,9 +61,9 @@
 <div class="c">
     <div v-if="fileList.length==0" class="m">
         <div class="m1">
-            <Upload multiple type="drag" action="" :before-upload="beforeSendFileToOCR" accept=".pdf">
+            <Upload multiple type="drag" action="" :before-upload="beforeSendFileToOCR" accept=".apk">
                 <div style="padding: 20px 0">
-                    <img height="73" width="58" src="@/assets/images/i1.png" alt="PDF文字识别" />
+                    <img height="73" width="58" src="@/assets/images/i1.png" alt="恶意APK检测" />
                     <div style="text-align: center">
                         <Button style="display: inline-block;" icon="ios-cloud-upload-outline">添加文件</Button>
                     </div>
@@ -75,10 +75,10 @@
         <Affix>
             <div>
                 <div class="n1">
-                    <Upload multiple type="drag" action="" :before-upload="beforeSendFileToOCR" accept=".pdf">
+                    <Upload multiple type="drag" action="" :before-upload="beforeSendFileToOCR" accept=".apk">
                         <div style="padding:0;">
                             <div style="text-align:center;display: flex;">
-                                <img style="margin-right:5px;height:30px;width:24px;" height="30" width="24" src="@/assets/images/i1.png" alt="PDF文字识别" />
+                                <img style="margin-right:5px;height:30px;width:24px;" height="30" width="24" src="@/assets/images/i1.png" alt="恶意APK检测" />
                                 <Button type="primary" style="display:inline-block;" icon="ios-cloud-upload-outline">添加文件</Button>
                             </div>
                         </div>
@@ -90,9 +90,9 @@
         <div class="n2">
             <List>
                 <ListItem style="cursor:pointer;" class="file-item" v-for="(ocrfile,index) in fileList" :key="index">
-                    <img v-show="(ocrfile.id+3)%3==0" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i2.png" alt="PDF文字识别" />
-                    <img v-show="(ocrfile.id+3)%3==1" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i3.png" alt="PDF文字识别" />
-                    <img v-show="(ocrfile.id+3)%3==2" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i4.png" alt="PDF文字识别" />
+                    <img v-show="(ocrfile.id+3)%3==0" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i2.png" alt="恶意APK检测" />
+                    <img v-show="(ocrfile.id+3)%3==1" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i3.png" alt="恶意APK检测" />
+                    <img v-show="(ocrfile.id+3)%3==2" style="margin-left:10px;margin-right:5px;height:15px;width:12px;" height="15" width="12" src="@/assets/images/i4.png" alt="恶意APK检测" />
                     <span style="color:#808695;width:150px;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                         {{ocrfile.file.name}}
                     </span>
@@ -209,7 +209,7 @@ export default {
     },
     metaInfo() {
         return {
-            title: "凡凡PDF文字识别"
+            title: "BIT910恶意APK检测系统"
         };
     },
     mounted() {

@@ -33,7 +33,7 @@
                     <el-menu router unique-opened default-active="/task" class="e">
                         <el-menu-item index="/task">
                             <i class="el-icon-document"></i>
-                            <span slot="title">PDF文字识别</span>
+                            <span slot="title">恶意检测</span>
                         </el-menu-item>
                         <el-menu-item index="/setting">
                             <i class="el-icon-set-up"></i>
@@ -41,7 +41,7 @@
                         </el-menu-item>
                         <el-menu-item index="/sponsor">
                             <i class="el-icon-coffee-cup"></i>
-                            <span slot="title">打个赏吧</span>
+                            <span slot="title">日志文件</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
