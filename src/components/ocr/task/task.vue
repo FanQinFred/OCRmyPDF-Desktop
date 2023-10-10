@@ -20,7 +20,7 @@
 
     .n {
         width: 100%;
-        height: 60px;
+        height: 100%;
 
         .n1 {
             display: flex;
@@ -34,7 +34,21 @@
 
         .n2 {
             margin-top: 10px;
+            .ivu-scroll-wrapper{
+                ::v-deep .ivu-scroll-container{
+                    height:400px !important;
+                    // overflow-x: hidden;
+                    // overflow-y: hidden;
+                }
+            }
 
+            ::v-deep .el-alert__content{
+                text-align: left;
+                float: left;
+            }
+            ::v-deep .el-alert{
+                border-radius: 0;
+            }
             ::v-deep .ivu-progress {
                 width: 50% !important;
                 //width:400px;
@@ -170,6 +184,20 @@
                     </div>
                 </ListItem>
             </List>
+
+            <Scroll>
+                <el-alert
+                v-for="(log, index) in logs"
+                :key="index"
+                :title="log.message"
+                :type="log.logType"
+                :closable="false"
+                :show-icon="false"
+                :center="false"
+                :effect="log.logEffect"
+                ></el-alert>
+            </Scroll>
+           
         </div>
     </div>
 </div>
@@ -177,7 +205,7 @@
 
 <script>
 import {
-    submit_ocr_task,
+    // submit_ocr_task,
     query_file_status,
     stop_file_ocr
 } from "@/api/api.js";
@@ -204,7 +232,8 @@ export default {
             taskIntervalWorking: false,
             busy: false,
             statusInterval: null,
-            loading:null
+            loading:null,
+            logs: [],
         };
     },
     metaInfo() {
@@ -240,6 +269,35 @@ export default {
                 }
             }, 1000)
         }
+        ipcRenderer.on('docker-cmd-stdout', (event, message) => {
+            console.log('stdout message: ' + message);
+            let log = {};
+            log.message = (new Date()).toLocaleString() + " " + message;
+            log.logType = "info";
+            log.logEffect = "light";
+            this.logs.unshift(log);
+        })
+        ipcRenderer.on('docker-cmd-stderr', (event, message) => {
+            console.log('stderr message: ' + message);
+            let log = {};
+            log.message = (new Date()).toLocaleString() + " " + message;
+            log.logType = "error";
+            log.logEffect = "light";
+            this.logs.unshift(log);
+        })
+        ipcRenderer.on('docker-cmd-close', (event, message) => {
+            console.log('close message: ' + message);
+            let log = {};
+            if(message=="1"||message==1){
+                log.message = (new Date()).toLocaleString() + " " + "Error::Exit code is "+message+", Please see bottom log for detail."
+                log.logType = "error";
+            }else{
+                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is "+message+"."
+                log.logType = "success";
+            }
+            log.logEffect = "light";
+            this.logs.unshift(log);
+        })
     },
     destroyed() {
 
@@ -257,24 +315,22 @@ export default {
         },
         sendFileToOCR(ocrfile) {
             var that = this;
+            console.log(that);
             this.busy = true;
             ocrfile.status = 1;
             ocrfile.desciption_progress = "扫描内容中";
-            let requestData = {
-                "input_file": ocrfile.file.path,
-                "output_file": ocrfile.file.path
-            }
-            submit_ocr_task(requestData).then(sot => {
-                if (sot.code == "200") {
-                    ocrfile.uid = sot.id;
-                    if (that.statusInterval) {
-                        clearPromiseInterval(that.statusInterval);
-                    }
-                    that.statusInterval = setPromiseInterval(async () => {
-                        that.statusListener(sot.id, ocrfile);
-                    }, 2000);
-                }
-            });
+            this.logs=[];
+          
+            // 1.将文件复制到工作目录
+            console.log("ocrfile: %o",ocrfile);
+            that.copyAPKFileToScanDirectory(ocrfile.file.path);
+            // 2.使用CMD命令执行静态APK文件分析
+            that.extractAPKFeature();
+            // 3.读取CMD命令的日志文件并显示
+            // 4.获取APK的特征矩阵
+            that.judgeAPKWithMachineLearning();
+            // 5.调用机器学习进行判断是否为恶意APK或者APK类型
+            // 6.显示判断结果
         },
         // 文字提示中PDF名字应该换个颜色
         beforeSendFileToOCR(file) {
@@ -288,7 +344,7 @@ export default {
             }
             if (that.checkFileExsits(that.$global.fileList, ocrfile.file)) {
                 that.$Message.warning({
-                    content: "PDF " + ocrfile.file.name + " 已经被添加了哦"
+                    content: "APK " + ocrfile.file.name + " 已经被添加了哦"
                 })
                 return false;
             }
@@ -372,6 +428,16 @@ export default {
             that.$global.fileList.splice(0);
             clearPromiseInterval(that.statusInterval);
             return;
+        },
+        // 2023/10/10 添加恶意APK的相关函数
+        copyAPKFileToScanDirectory(apkFilePath){
+            ipcRenderer.sendSync('copyAPKFileToScanDirectory', apkFilePath);
+        }, 
+        extractAPKFeature(){
+            ipcRenderer.sendSync('extractAPKFeature');
+        },
+        judgeAPKWithMachineLearning(){
+            ipcRenderer.sendSync('judgeAPKWithMachineLearning');
         }
     },
 };
