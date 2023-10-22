@@ -34,21 +34,24 @@
 
         .n2 {
             margin-top: 10px;
-            .ivu-scroll-wrapper{
-                ::v-deep .ivu-scroll-container{
-                    height:400px !important;
+
+            .ivu-scroll-wrapper {
+                ::v-deep .ivu-scroll-container {
+                    height: 280px !important;
                     // overflow-x: hidden;
                     // overflow-y: hidden;
                 }
             }
 
-            ::v-deep .el-alert__content{
+            ::v-deep .el-alert__content {
                 text-align: left;
                 float: left;
             }
-            ::v-deep .el-alert{
+
+            ::v-deep .el-alert {
                 border-radius: 0;
             }
+
             ::v-deep .ivu-progress {
                 width: 50% !important;
                 //width:400px;
@@ -65,6 +68,26 @@
 
             .file-item:hover {
                 background-color: rgb(238 238 238 / 31%);
+            }
+
+            .circle {
+                width: 100px;
+                height: 100px;
+                border: 5px dashed #19be6b;
+                border-radius: 50%;
+                text-align: center;
+
+                .text {
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-top: 30px;
+                }
+            }
+
+            .result {
+                font-size: 14px;
+                text-align: center;
+                margin-top: 10px;
             }
         }
     }
@@ -119,7 +142,7 @@
                         </div>
                         <div v-else-if="ocrfile.status==2||ocrfile.status=='2'">
                             <el-button v-if="ocrfile.label.indexOf('BENIGN')!=-1" @click="openPDF(ocrfile.file.path)" type="text" :style="{'border':'none','color':'#2ba52b'}" size="small" icon="el-icon-document">{{ocrfile.label}}</el-button>
-                            <el-button v-else                         @click="openPDF(ocrfile.file.path)" type="text" :style="{'border':'none','color':'red'}" size="small" icon="el-icon-document">{{ocrfile.label}}</el-button>
+                            <el-button v-else @click="openPDF(ocrfile.file.path)" type="text" :style="{'border':'none','color':'red'}" size="small" icon="el-icon-document">{{ocrfile.label}}</el-button>
                             <el-button @click="openFolder(ocrfile.file.path)" type="text" style="border:none;" size="small" icon="el-icon-folder-opened">文件夹</el-button>
                             <el-button @click="cancelTask(index)" type="text" style="border:none;" size="small" icon="el-icon-delete">删除</el-button>
                         </div>
@@ -186,19 +209,50 @@
                 </ListItem>
             </List>
 
-            <Scroll>
-                <el-alert
-                v-for="(log, index) in logs"
-                :key="index"
-                :title="log.message"
-                :type="log.logType"
-                :closable="false"
-                :show-icon="false"
-                :center="false"
-                :effect="log.logEffect"
-                ></el-alert>
-            </Scroll>
-           
+            <transition name="el-zoom-in-top">
+            <div v-show="!busy && finishCheck && checkResult">
+                <div style="display: flex;margin-left: 20px;letter-spacing: 2px;">
+                    <div style="display: block;margin:auto 20px;">
+                        <div class="circle" :style="{'border':checkResult=='良性'?'5px dashed #19be6b':'5px dashed red'}">
+                            <div class="text">
+                                <Icon :style="{'color':checkResult=='良性'?'aquamarine':'red'}" size="16" type="md-checkbox" />
+                                <span :style="{'color':checkResult=='良性'?'#19be6b':'red','font-size':'16px'}">{{ checkResult }}</span>
+                            </div>
+                        </div>
+                        <div class="result" :style="{'color':checkResult=='良性'?'':'red'}">检测结果</div>
+                    </div>
+                    <div style="display: block;margin:auto 20px;width:700px;margin-right: 0;">
+                        <el-row style="height: 50px;">
+                            <el-col style="height:100%;text-align: left;background-color: antiquewhite;" :span="24">
+                                <span style="margin-left: 20px; color: cadetblue; line-height: 50px; font-size: 16px;">分析结果</span>
+                            </el-col>
+                        </el-row>
+                        <el-row style="height: 45px;">
+                            <el-col  style="line-height: 50px; font-size: 16px;height:100%;text-align: left;background-color: rgb(255, 255, 255);border: 1px solid antiquewhite;" :span="24">
+                                <span style="margin-left: 20px; color: rgb(86, 90, 90); line-height: 50px; font-size: 16px;">采用</span>
+                                <span style="margin: auto 4px; font-family: 'Times New Roman', Times, serif;">NeuralNetFastAI</span>
+                                <span>算法分析结果: 该软件是</span>
+                                <span  :style="{'color':checkResult=='良性'?'#19be6b':'red'}">{{checkResult}}</span>
+                                <span style="line-height: 50px; font-size: 16px;">软件。</span>
+                            </el-col>
+
+                            <el-col  style="line-height: 50px; font-size: 12px;height:100%;text-align: left;background-color: rgb(255, 255, 255);border: 1px solid antiquewhite;" :span="24">
+                                <span style="margin-left: 20px; color: rgb(143 152 152); line-height: 50px; font-size: 16px;">预测概率：</span><span style="font-family: 'Times New Roman', Times, serif;">{{resultDescription}}</span>
+                            </el-col>
+
+                        </el-row>
+                    </div>
+                  
+                </div>
+            </div>
+            </transition>
+
+            <div style="margin-top: 10px;">
+                <Scroll>
+                    <el-alert v-for="(log, index) in logs" :key="index" :title="log.message" :type="log.logType" :closable="false" :show-icon="false" :center="false" :effect="log.logEffect"></el-alert>
+                </Scroll>
+
+            </div>
         </div>
     </div>
 </div>
@@ -225,15 +279,20 @@ export default {
     },
     data() {
         return {
-            currentTaskIndex:0,
+            currentTaskIndex: 0,
             fileMaxId: 0,
             fileList: [],
             taskInterval: null,
             taskIntervalWorking: false,
             busy: false,
             statusInterval: null,
-            loading:null,
+            loading: null,
             logs: [],
+
+            checkResult:null,
+            resultProb:0.65,
+            finishCheck:false,
+            resultDescription:null
         };
     },
     metaInfo() {
@@ -271,20 +330,42 @@ export default {
             }, 1000)
         }
         ipcRenderer.on('docker-cmd-stdout', (event, message) => {
-            if(message.toLowerCase().indexOf("launching flowdroid")!=-1){
+            console.log(message);
+            if (message.toLowerCase().indexOf("launching flowdroid") != -1) {
                 that.fileList[that.currentTaskIndex].progress = parseInt(5);
                 that.fileList[that.currentTaskIndex].desciption_progress = "Launching FlowDroid";
-            }else if(message.toLowerCase().indexOf("processing flowdroid")!=-1){
+            } else if (message.toLowerCase().indexOf("processing flowdroid") != -1) {
                 that.fileList[that.currentTaskIndex].progress = parseInt(10);
                 that.fileList[that.currentTaskIndex].desciption_progress = "Processing FlowDroid";
-            }else if(message.toLowerCase().indexOf("execute features")!=-1){
+            } else if (message.toLowerCase().indexOf("execute features") != -1) {
                 that.fileList[that.currentTaskIndex].progress = parseInt(20);
                 that.fileList[that.currentTaskIndex].desciption_progress = "Execute Features";
-            }else if(message.toLowerCase().indexOf("predict result:")!=-1){
+            } else if (message.toLowerCase().indexOf("predict result:") != -1) {
                 const startIndex = message.lastIndexOf(":") + 1; // 获取最后一个冒号后的索引
                 const result = message.substring(startIndex); // 提取从 startIndex 开始到字符串的末尾的部分
                 console.log(result); // 输出 "benign"
                 that.fileList[that.currentTaskIndex].label = result.toUpperCase();
+                if( result.toUpperCase()=='SMSmalware'.toUpperCase()){
+                    that.checkResult = '恶意';
+                }else if( result.toUpperCase()=='adware'.toUpperCase()){
+                    that.checkResult = '恶意';
+                }
+                else if( result.toUpperCase().trim()=='benign'.toUpperCase()){
+                    that.checkResult = '良性';
+                }
+                else{
+                    that.checkResult = '恶意';
+                }
+                that.busy = false;
+                that.finishCheck = true;
+
+                if (message.toLowerCase().indexOf("prob result:") != -1) {
+                const startIndex2 = message.lastIndexOf("Prob result:") + 12; // 获取最后一个冒号后的索引
+                const endIndex2 = message.lastIndexOf("Predict result:"); // 获取最后一个冒号后的索引
+                const result2 = message.substring(startIndex2,endIndex2); // 提取从 startIndex 开始到字符串的末尾的部分
+                console.log(result2); // 输出 "benign"
+                that.resultDescription = result2;
+            }
             }
             let log = {};
             log.message = (new Date()).toLocaleString() + " " + message;
@@ -302,20 +383,21 @@ export default {
         ipcRenderer.on('docker-cmd-close', (event, message) => {
             console.log('close message: ' + message);
             let log = {};
-            if(message=="100"||message==100){
-                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is "+message+" Machine-Learning test Succesfully."
+            if (message == "100" || message == 100) {
+                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is " + message + " Machine-Learning test Succesfully."
                 log.logType = "success";
                 that.fileList[that.currentTaskIndex].progress = parseInt(100);
                 that.fileList[that.currentTaskIndex].desciption_progress = "";
                 that.busy = false;
+                that.finishCheck = true;
                 that.fileList[that.currentTaskIndex].status = 2;
                 clearPromiseInterval(that.statusInterval);
                 return;
-            }else if(message=="1"||message==1){
-                log.message = (new Date()).toLocaleString() + " " + "Error::Exit code is "+message+", Please see bottom log for detail."
+            } else if (message == "1" || message == 1) {
+                log.message = (new Date()).toLocaleString() + " " + "Error::Exit code is " + message + ", Please see bottom log for detail."
                 log.logType = "error";
-            }else{
-                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is "+message+"."
+            } else {
+                log.message = (new Date()).toLocaleString() + " " + "Succesfully::Exit code is " + message + "."
                 log.logType = "success";
             }
             log.logEffect = "light";
@@ -338,14 +420,21 @@ export default {
         },
         sendFileToOCR(ocrfile) {
             var that = this;
+
+            this.busy = false;
+            that.logs.splice(0);
+            that.finishCheck = false;
+            that.checkResult=null;
+
+
             console.log(that);
             that.busy = true;
             ocrfile.status = 1;
             ocrfile.desciption_progress = "扫描内容中";
-            that.logs=[];
-          
+            that.logs = [];
+
             // 1.将文件复制到工作目录
-            console.log("ocrfile: %o",ocrfile);
+            console.log("ocrfile: %o", ocrfile);
             that.copyAPKFileToScanDirectory(ocrfile.file.path);
             // 2.使用CMD命令执行静态APK文件分析
             that.extractAPKFeature();
@@ -401,16 +490,19 @@ export default {
             var that = this;
             this.busy = false;
             that.$global.fileList.splice(0);
+            that.logs.splice(0);
+            that.finishCheck = false;
+            that.checkResult=null;
             return;
         },
         // 2023/10/10 添加恶意APK的相关函数
-        copyAPKFileToScanDirectory(apkFilePath){
+        copyAPKFileToScanDirectory(apkFilePath) {
             ipcRenderer.sendSync('copyAPKFileToScanDirectory', apkFilePath);
-        }, 
-        extractAPKFeature(){
+        },
+        extractAPKFeature() {
             ipcRenderer.sendSync('extractAPKFeature');
         },
-        judgeAPKWithMachineLearning(){
+        judgeAPKWithMachineLearning() {
             ipcRenderer.sendSync('judgeAPKWithMachineLearning');
         }
     },

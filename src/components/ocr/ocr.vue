@@ -39,10 +39,10 @@
                             <i class="el-icon-set-up"></i>
                             <span slot="title">参数设置</span>
                         </el-menu-item>
-                        <el-menu-item index="/sponsor">
+                        <!-- <el-menu-item index="/sponsor">
                             <i class="el-icon-coffee-cup"></i>
                             <span slot="title">日志文件</span>
-                        </el-menu-item>
+                        </el-menu-item> -->
                     </el-menu>
                 </el-aside>
                 <el-main>

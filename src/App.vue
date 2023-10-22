@@ -29,8 +29,8 @@ export default {
 
 ::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 2px;
-    height: 2px;
+    width: 0px;
+    height: 0px;
     cursor: pointer;
 }
 
