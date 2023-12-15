@@ -1,12 +1,16 @@
 [English Document](/README.en.md)
 ***
 # OCRmyPDF桌面端
-鉴于很多使用者不会配置环境，我们在OCRmyPDF的基础上，集成了所需环境，并使用Electron开发了桌面端。
+鉴于很多使用者不会配置环境，我们在OCRmyPDF的基础上，集成了所需环境，并使用Electron开发了桌面端。 [在线体验地址](https://tool.caj2pdf.cn/pdf-ocr)
 
 <img src="https://raw.githubusercontent.com/FanQinFred/OCRmyPDF-Desktop/main/Doc/images/example.gif" style="border-radius:5px;border:5px solid #ddd;" width="100%">
 
 ***
 
+## 在线体验地址
+ [在线体验地址](https://tool.caj2pdf.cn/pdf-ocr)
+
+ 
 ## 安装
 
 
@@ -35,6 +39,7 @@
 - [ ] UI界面美化
 - [ ] 缩小安装包的体积
 - [ ] 支持MacOS平台
+- [ ] 最近发现深度学习比传统的机器学习效果更好，准备抛弃现在的模型，采用PaddleOCR作为引擎。
 
 ***
 ## 打赏赞助
