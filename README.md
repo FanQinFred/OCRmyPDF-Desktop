@@ -1,3 +1,5 @@
+2025年4月1日更新：忙着毕业，写完毕设再更新。急的话用在线的（1元钱）：https://iloveofd.cn/pdf-ocr
+
 [English Document](/README.en.md)
 ***
 # OCRmyPDF桌面端
